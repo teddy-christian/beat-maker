@@ -1,13 +1,26 @@
+import wave
+from array import array
 
 class Sound:
+    samples = None
+    nb_samples = 0
+
     def __init__(self, filename, displayname):
         self.filename = filename
         self.displayname = displayname
+        self.load_sound()
+
+    def load_sound(self):
+        wav_file = wave.open(self.filename, mode="rb")
+        self.nb_samples = wav_file.getnframes()
+        frames = wav_file.readframes(self.nb_samples)
+        self.samples = array('h', frames)
+        
 
 class SoundKit:
     sounds = ()
 
-    def get_nb_tracks(self):
+    def get_nb_tracks(self):    
         return len(self.sounds)
 
 class SoundKit1(SoundKit):
