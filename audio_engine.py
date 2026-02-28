@@ -1,10 +1,14 @@
 from audiostream.core import get_output
 
+from audio_source_mixer import AudioSourceMixer
+from audio_source_one_shot import AudioSourceOneShot
+from audio_source_track import AudioSourceTrack
+
 
 class AudioEngine:
     NB_CHANNELS = 1
     SAMPLE_RATE = 44100
-    BUFFER_SIZE = 1024
+    BUFFER_SIZE = 4096
 
     def __init__(self):
         self.output_stream = get_output(channels=self.NB_CHANNELS, rate=self.SAMPLE_RATE, buffer=self.BUFFER_SIZE)
@@ -17,5 +21,14 @@ class AudioEngine:
 
     def create_track(self, wav_samples, bpm):
         source_track = AudioSourceTrack(self.output_stream, wav_samples, bpm, self.SAMPLE_RATE)
-        source_track.set_steps((1, 0, 0, 0))
+        # source_track.set_steps((1, 0, 0, 0))
         source_track.start()
+        return source_track
+
+    def create_mixer(self, all_wav_samples, bpm, nb_steps):
+        source_mixer = AudioSourceMixer(self.output_stream, all_wav_samples, bpm, self.SAMPLE_RATE, nb_steps)
+        source_mixer.start()
+        return source_mixer
+        # creer le mixeur
+        # starter
+        # return
