@@ -70,3 +70,9 @@ beat-maker/
 ├── mrbeat.kv                # Main layout
 └── sounds/kit1/             # 44 drum samples
 ```
+
+## License
+
+© 2026 teddy-christian — **All Rights Reserved.**  
+Viewing the source code does not grant any right to use, copy, or distribute it.  
+See [LICENSE](LICENSE) for details.
