@@ -2,8 +2,6 @@
 
 ![Screenshot](docs/screenshot.png)
 
-> *Replace `docs/screenshot.png` with an actual screenshot of the app.*
-
 ---
 
 ## Requirements
