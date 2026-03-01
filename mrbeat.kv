@@ -1,4 +1,5 @@
 #:import track track
+#:import play_indicator play_indicator
 
 MainWidget:
 
@@ -6,15 +7,40 @@ MainWidget:
 
 <MainWidget>:
     tracks_layout: tracks_layout
+    play_indicator_widget: play_indicator_widget
     BoxLayout:
         orientation: "vertical"
         BoxLayout:
             size_hint_y: None
-            height: dp(100)
+            height: dp(50)
             ControlButton:
                 text: "PLAY"
+                on_press: root.on_play_button_pressed()
             ControlButton:
                 text: "STOP"
-        BoxLayout:
-            id: tracks_layout
-            orientation: "vertical"
+                on_press: root.on_stop_button_pressed()
+            ControlButton:
+                text: "-"
+                width: dp(50)
+                size_hint_x: None
+                on_press: root.bpm -= 5
+            Label:
+                text: str(root.bpm)
+                width: dp(80)
+                size_hint_x: None
+            ControlButton:
+                text: "+"
+                width: dp(50)
+                size_hint_x: None
+                on_press: root.bpm += 5
+        PlayIndicatorWidget:
+            id: play_indicator_widget
+            size_hint_y: None
+            height: dp(18)
+            left_align: root.TRACK_STEPS_LEFT_ALIGN
+        ScrollView:
+            BoxLayout:
+                id: tracks_layout
+                orientation: "vertical"
+                size_hint_y: None
+                height: self.minimum_height
