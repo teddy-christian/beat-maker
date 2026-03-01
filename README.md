@@ -4,6 +4,20 @@
 
 ---
 
+**MrBeat** is a desktop drum machine / beat sequencer built with [Kivy](https://kivy.org/) and Python.
+
+It lets you compose rhythmic patterns by toggling step buttons across 44 drum and percussion sounds from a built-in sample kit. Each track represents one sound — kick, snare, hats, booms, vocals, and more — and each step button represents a subdivided beat within the bar. Enable PLAY and the sequencer loops through all 16 steps at your chosen BPM, mixing every active track into a live audio stream powered by [sounddevice](https://python-sounddevice.readthedocs.io/) (PortAudio).
+
+**Key features:**
+- 🎚️ 44-track step sequencer with 16 steps per track
+- 🥁 44 built-in drum/percussion samples (kicks, snares, hats, booms, vocals, FX…)
+- ⏱️ Adjustable BPM (80–160) in real time
+- 🔊 One-shot sound preview per instrument
+- 📍 Visual play position indicator
+- 🖥️ Pure Python — no compiled audio library required
+
+---
+
 ## Requirements
 
 - Python 3.11+
