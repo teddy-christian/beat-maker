@@ -1,3 +1,14 @@
+import sys
+import os
+
+def resource_path(relative_path):
+    """Return the absolute path to a bundled resource.
+    Works both in development (normal Python) and when frozen by PyInstaller.
+    """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
 from kivy.config import Config
 Config.set('graphics', 'width',  '600')
 Config.set('graphics', 'height', '200')
@@ -12,8 +23,9 @@ from track import TrackWidget
 from sound_kit_service import SoundKitService
 from audio_engine import AudioEngine
 
-Builder.load_file("track.kv")
-Builder.load_file("play_indicator.kv")
+Builder.load_file(resource_path("track.kv"))
+Builder.load_file(resource_path("play_indicator.kv"))
+Builder.load_file(resource_path("mrbeat.kv"))
 
 TRACK_NB_STEPS = 16
 MIN_BPM = 80
@@ -59,10 +71,10 @@ class MainWidget(RelativeLayout):
         if value > MAX_BPM:
             self.bpm = MAX_BPM
             return
-
         self.mixer.set_bpm(self.bpm)
 
 class MrBeatApp(App):
-    pass
+    def build(self):
+        pass
 
 MrBeatApp().run()

@@ -1,5 +1,14 @@
+import sys
+import os
 import wave
 from array import array
+
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
 
 class Sound:
     samples = None
@@ -11,16 +20,16 @@ class Sound:
         self.load_sound()
 
     def load_sound(self):
-        wav_file = wave.open(self.filename, mode="rb")
+        wav_file = wave.open(resource_path(self.filename), mode="rb")
         self.nb_samples = wav_file.getnframes()
         frames = wav_file.readframes(self.nb_samples)
         self.samples = array('h', frames)
-        
+
 
 class SoundKit:
     sounds = ()
 
-    def get_nb_tracks(self):    
+    def get_nb_tracks(self):
         return len(self.sounds)
 
     def get_all_samples(self):
@@ -84,5 +93,4 @@ class SoundKitService:
     def get_sound_at(self, index):
         if index >= len(self.soundKit.sounds):
             return None
-    
         return self.soundKit.sounds[index]
