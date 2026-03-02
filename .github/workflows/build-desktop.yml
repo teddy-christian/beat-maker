@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             artifact_name: beat-maker-linux
             artifact_path: dist/beat-maker-linux
           - os: windows-latest
