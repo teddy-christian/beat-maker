@@ -25,7 +25,6 @@ from audio_engine import AudioEngine
 
 Builder.load_file(resource_path("track.kv"))
 Builder.load_file(resource_path("play_indicator.kv"))
-Builder.load_file(resource_path("mrbeat.kv"))
 
 TRACK_NB_STEPS = 16
 MIN_BPM = 80
@@ -74,7 +73,6 @@ class MainWidget(RelativeLayout):
         self.mixer.set_bpm(self.bpm)
 
 class MrBeatApp(App):
-    def build(self):
-        pass
+    kv_file = resource_path("mrbeat.kv")
 
 MrBeatApp().run()
