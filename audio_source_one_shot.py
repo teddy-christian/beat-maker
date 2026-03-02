@@ -1,5 +1,6 @@
-from audiostream.sources.thread import ThreadSource
+from thread_source import ThreadSource
 from array import array
+
 
 class AudioSourceOneShot(ThreadSource):
     wav_samples = None

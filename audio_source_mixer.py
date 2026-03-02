@@ -1,4 +1,4 @@
-from audiostream.sources.thread import ThreadSource
+from thread_source import ThreadSource
 from audio_source_track import AudioSourceTrack
 from array import array
 
@@ -39,7 +39,6 @@ class AudioSourceMixer(ThreadSource):
     def set_steps(self, index, steps):
         if index >= len(self.tracks):
             return
-
         if len(steps) == self.nb_steps:
             self.tracks[index].set_steps(steps)
 
@@ -55,7 +54,6 @@ class AudioSourceMixer(ThreadSource):
         self.is_playing = False
 
     def get_bytes(self, *args, **kwargs):
-
         for i in range(0, len(self.tracks)):
             self.tracks[i].set_bpm(self.bpm)
 
@@ -68,14 +66,14 @@ class AudioSourceMixer(ThreadSource):
         for i in range(0, len(self.tracks)):
             track = self.tracks[i]
             track_buffer = track.get_bytes_array()
-            if track_buffer is not None:  # guard against broken track
+            if track_buffer is not None:
                 track_buffers.append(track_buffer)
 
         s = map(sum_16bits, zip(*track_buffers))
         self.buf = array('h', s)
 
         if self.on_current_step_changed is not None:
-            step_index_for_display = self.current_step_index - 2 # The number of Sync
+            step_index_for_display = self.current_step_index - 6
             if step_index_for_display < 0:
                 step_index_for_display += self.nb_steps
             self.on_current_step_changed(step_index_for_display)

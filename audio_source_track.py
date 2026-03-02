@@ -1,5 +1,6 @@
-from audiostream.sources.thread import ThreadSource
+from thread_source import ThreadSource
 from array import array
+
 
 class AudioSourceTrack(ThreadSource):
     steps = ()
@@ -22,7 +23,6 @@ class AudioSourceTrack(ThreadSource):
         self.buffer_nb_samples = self.compute_step_nb_samples(min_bpm)
         self.buf = array('h', b"\x00\x00" * self.buffer_nb_samples)
         self.silence = array('h', b"\x00\x00" * self.buffer_nb_samples)
-
 
         if not self.bpm == 0:
             n = int(self.sample_rate * 15 / self.bpm)
@@ -47,14 +47,12 @@ class AudioSourceTrack(ThreadSource):
     def no_steps_activated(self):
         if len(self.steps) == 0:
             return True
-
         for i in range(len(self.steps)):
             if self.steps[i] == 1:
                 return False
         return True
 
     def get_bytes_array(self):
-
         result_buf = None
 
         if self.no_steps_activated():
@@ -73,14 +71,13 @@ class AudioSourceTrack(ThreadSource):
             if index > self.nb_wav_samples:
                 result_buf = self.silence[0:self.step_nb_samples]
             elif self.nb_wav_samples >= self.step_nb_samples:
-                result_buf = self.wav_samples[index:self.step_nb_samples+index]
+                result_buf = self.wav_samples[index:self.step_nb_samples + index]
             else:
-                silence_nb_samples = self.nb_wav_samples-self.nb_wav_samples+index
+                silence_nb_samples = self.nb_wav_samples - self.nb_wav_samples + index
                 result_buf = self.wav_samples[index:self.nb_wav_samples]
                 result_buf.extend(self.silence[0:silence_nb_samples])
 
         self.current_sample_index += self.step_nb_samples
-
         self.current_step_index += 1
         if self.current_step_index >= len(self.steps):
             self.current_step_index = 0

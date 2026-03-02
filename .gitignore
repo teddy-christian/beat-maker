@@ -9,9 +9,6 @@ __pycache__/
 *$py.class
 *.pyo
 
-# Kivy
-*.kv.py
-
 # IDE
 .idea/
 .vscode/
@@ -21,3 +18,9 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Build outputs
+dist/
+build/
+.buildozer/
+*.spec.bak

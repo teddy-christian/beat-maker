@@ -14,29 +14,33 @@ It lets you compose rhythmic patterns by toggling step buttons across 44 drum an
 - ⏱️ Adjustable BPM (80–160) in real time
 - 🔊 One-shot sound preview per instrument
 - 📍 Visual play position indicator
-- 🖥️ Pure Python — no compiled audio library required
+- 🖥️ Python-based — audio powered by the bundled `audiostream` library (compiled once on first install)
 
 ---
 
 ## Requirements
 
 - Python 3.11+
-- A virtual environment with the dependencies below
+- **macOS**: [Homebrew](https://brew.sh/) (to install SDL)
+- **Linux**: `apt-get` (tested on Ubuntu/Debian)
 
 ## Setup
+
+Run the one-command installer — it handles everything automatically:
 
 ```bash
 # Clone the repo
 git clone https://github.com/teddy-christian/beat-maker.git
 cd beat-maker
 
-# Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install dependencies
-pip install kivy sounddevice Cython
+# Run the installer (handles SDL, venv, Python deps, and audiostream build)
+chmod +x install.sh
+./install.sh
 ```
+
+> **macOS note**: Homebrew must be installed first. The script supports both Intel (`/usr/local`) and Apple Silicon (`/opt/homebrew`).
+
+> **Linux note**: The script uses `sudo apt-get` to install SDL libraries. You will be prompted for your password.
 
 ## Run
 
