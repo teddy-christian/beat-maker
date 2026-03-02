@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-apk:
     name: Android APK
@@ -27,7 +30,7 @@ jobs:
             git zip unzip openjdk-17-jdk \
             libffi-dev libssl-dev \
             python3-pip autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake \
+            zlib1g-dev libncurses-dev cmake \
             libstdc++6 libgcc1
 
       - name: Install Buildozer
@@ -45,7 +48,6 @@ jobs:
           cp packaging/buildozer.spec buildozer.spec
           buildozer android debug
           mkdir -p dist
-          cp .buildozer/android/platform/build-*/dists/mrbeat/build/outputs/apk/debug/*.apk dist/beat-maker.apk || \
           find .buildozer -name "*.apk" -exec cp {} dist/beat-maker.apk \;
 
       - name: Upload APK artifact

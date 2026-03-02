@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: ${{ matrix.os }}
@@ -16,7 +19,7 @@ jobs:
         include:
           - os: ubuntu-latest
             artifact_name: beat-maker-linux
-            artifact_path: dist/beat-maker
+            artifact_path: dist/beat-maker-linux
           - os: windows-latest
             artifact_name: beat-maker.exe
             artifact_path: dist/beat-maker.exe
@@ -42,8 +45,7 @@ jobs:
       # ── macOS system deps ──────────────────────────────────────────────────
       - name: Install macOS system deps
         if: runner.os == 'macOS'
-        run: |
-          brew install portaudio sdl2 sdl2_image sdl2_mixer sdl2_ttf create-dmg
+        run: brew install portaudio sdl2 sdl2_image sdl2_mixer sdl2_ttf create-dmg
 
       # ── Windows system deps ────────────────────────────────────────────────
       - name: Install Windows system deps
@@ -58,9 +60,7 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
+        run: pip install --upgrade pip && pip install -r requirements.txt pyinstaller
 
       # ── Build executable ───────────────────────────────────────────────────
       - name: Build with PyInstaller
