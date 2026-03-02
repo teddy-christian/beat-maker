@@ -1,0 +1,100 @@
+name: Build Desktop
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: beat-maker-linux
+            artifact_path: dist/beat-maker
+          - os: windows-latest
+            artifact_name: beat-maker.exe
+            artifact_path: dist/beat-maker.exe
+          - os: macos-latest
+            artifact_name: beat-maker.dmg
+            artifact_path: dist/beat-maker.dmg
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Linux system deps ──────────────────────────────────────────────────
+      - name: Install Linux system deps
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev \
+            libportaudio2 portaudio19-dev \
+            libgles2-mesa-dev libglib2.0-dev \
+            libmtdev-dev libinput-dev
+
+      # ── macOS system deps ──────────────────────────────────────────────────
+      - name: Install macOS system deps
+        if: runner.os == 'macOS'
+        run: |
+          brew install portaudio sdl2 sdl2_image sdl2_mixer sdl2_ttf create-dmg
+
+      # ── Windows system deps ────────────────────────────────────────────────
+      - name: Install Windows system deps
+        if: runner.os == 'Windows'
+        run: choco install -y upx
+
+      # ── Python setup ───────────────────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      # ── Build executable ───────────────────────────────────────────────────
+      - name: Build with PyInstaller
+        run: pyinstaller packaging/beat-maker.spec --distpath dist --workpath build/pyinstaller
+
+      # ── Linux: rename to consistent name ──────────────────────────────────
+      - name: Rename Linux binary
+        if: runner.os == 'Linux'
+        run: mv dist/beat-maker dist/beat-maker-linux
+
+      # ── macOS: package .app into .dmg ─────────────────────────────────────
+      - name: Create macOS DMG
+        if: runner.os == 'macOS'
+        run: |
+          create-dmg \
+            --volname "MrBeat" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --app-drop-link 400 190 \
+            "dist/beat-maker.dmg" \
+            "dist/beat-maker.app"
+
+      # ── Upload artifact ────────────────────────────────────────────────────
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
+
+      # ── Release asset (on tag push) ────────────────────────────────────────
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact_path }}
