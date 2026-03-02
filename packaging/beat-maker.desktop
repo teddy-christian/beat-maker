@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MrBeat
+Comment=Drum machine and beat maker
+Exec=%INSTALL_PATH%
+Icon=audio-x-generic
+Terminal=false
+Categories=AudioVideo;Music;
+Keywords=beat;drum;music;sequencer;
+StartupWMClass=beat-maker
